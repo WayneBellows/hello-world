@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AVD Policy Hierarchy Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <aside class="panel info-panel">
+      <header>
+        <h1>Hierarchy Builder Guide</h1>
+        <p>Plan and visualize how Azure Virtual Desktop policies, scripts, registry entries, and applications are prioritized. Drag items into the workspace to craft the execution order your host pools will follow.</p>
+      </header>
+      <section class="tips">
+        <h2>How to use</h2>
+        <ol>
+          <li>Drag an item or group from the palette into the workspace.</li>
+          <li>Drop items on top of groups to nest them.</li>
+          <li>Reorder by dragging items between groups and levels.</li>
+          <li>Drop unwanted items onto the trash can to delete them.</li>
+        </ol>
+      </section>
+      <section class="counts">
+        <h2>Workspace summary</h2>
+        <ul>
+          <li><span class="count" data-count="policies">0</span> Policies</li>
+          <li><span class="count" data-count="scripts">0</span> Scripts</li>
+          <li><span class="count" data-count="registry">0</span> Registry entries</li>
+          <li><span class="count" data-count="applications">0</span> Applications</li>
+          <li><span class="count" data-count="groups">0</span> Groups</li>
+        </ul>
+      </section>
+      <section class="status" aria-live="polite">
+        <h2>Status</h2>
+        <p class="status-message" data-tone="info">Start arranging your hierarchy.</p>
+      </section>
+    </aside>
+
+    <main class="workspace">
+      <header class="workspace-header">
+        <div>
+          <h2>Execution hierarchy</h2>
+          <p>Drag items here to model the runtime order. Groups execute from top to bottom, then through nested children.</p>
+        </div>
+        <div id="trash" class="trash" data-dropzone="trash" aria-label="Trash bin" title="Drop here to delete">
+          <span class="icon">🗑️</span>
+          <span class="label">Trash</span>
+        </div>
+      </header>
+      <section class="hierarchy">
+        <ul id="hierarchy-root" class="node-list" data-dropzone="root" data-parent-id="root" aria-label="Hierarchy root">
+          <li class="placeholder">Drop items here to begin building your hierarchy.</li>
+        </ul>
+      </section>
+    </main>
+
+    <aside class="panel palette">
+      <header>
+        <h2>Item palette</h2>
+        <p>Drag any item into the hierarchy. Items from the palette create new copies each time.</p>
+      </header>
+      <section class="palette-section">
+        <h3>Single items</h3>
+        <ul class="palette-items">
+          <li class="palette-item kind-policy" draggable="true" data-template="policy">
+            <span class="icon">🛡️</span>
+            <div>
+              <strong>Policy</strong>
+              <p>Enforce configuration with WVD policies.</p>
+            </div>
+          </li>
+          <li class="palette-item kind-script" draggable="true" data-template="script">
+            <span class="icon">📜</span>
+            <div>
+              <strong>Script</strong>
+              <p>Execute PowerShell automation or remediation steps.</p>
+            </div>
+          </li>
+          <li class="palette-item kind-registry" draggable="true" data-template="registry">
+            <span class="icon">🧾</span>
+            <div>
+              <strong>Registry entry</strong>
+              <p>Manage registry keys applied at session start.</p>
+            </div>
+          </li>
+          <li class="palette-item kind-application" draggable="true" data-template="application">
+            <span class="icon">📦</span>
+            <div>
+              <strong>Application</strong>
+              <p>Publish MSIX or Win32 applications to desktops.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+      <section class="palette-section">
+        <h3>Structure</h3>
+        <ul class="palette-items">
+          <li class="palette-item kind-group" draggable="true" data-template="group">
+            <span class="icon">📁</span>
+            <div>
+              <strong>Group</strong>
+              <p>Create a nested folder that can hold policies, scripts, apps, or additional groups.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <template id="group-template">
+    <li class="node node-group" data-kind="group">
+      <div class="node-header" draggable="true">
+        <span class="icon">📁</span>
+        <span class="node-title" contenteditable="true" spellcheck="false">New Group</span>
+        <span class="badge" aria-label="Child count">0</span>
+        <button class="delete-button" type="button" aria-label="Delete group">✖</button>
+      </div>
+      <ul class="node-list" data-dropzone="group" aria-label="Group children"></ul>
+    </li>
+  </template>
+
+  <template id="item-template">
+    <li class="node" draggable="true">
+      <div class="node-header">
+        <span class="icon"></span>
+        <span class="node-title"></span>
+        <button class="delete-button" type="button" aria-label="Delete item">✖</button>
+      </div>
+    </li>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
